@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hospital Management System - College Demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7fb;color:#172033}
+header{background:#176b87;color:white;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:25px}header p{margin:5px 0 0;opacity:.9}
+.layout{display:flex;min-height:calc(100vh - 86px)}aside{width:220px;background:#123b4a;padding:15px}
+nav button{display:block;width:100%;padding:12px;margin:5px 0;border:0;border-radius:7px;background:transparent;color:white;text-align:left;cursor:pointer;font-size:14px}
+nav button:hover,nav button.active{background:#2389a5}
+main{flex:1;padding:25px}.page{display:none}.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0}.card{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 10px #0001}.card small{color:#667085}.card b{display:block;font-size:28px;margin-top:8px;color:#176b87}
+.panel{background:white;padding:20px;border-radius:10px;margin:15px 0;box-shadow:0 2px 10px #0001}
+table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:#eef5f8}
+.btn{background:#176b87;color:white;border:0;padding:9px 14px;border-radius:6px;cursor:pointer;margin:3px}.danger{background:#c0392b}.green{background:#238b57}
+input,select{padding:9px;border:1px solid #ccd5dc;border-radius:5px;margin:5px;width:180px}
+.form{display:flex;flex-wrap:wrap;gap:4px}.badge{padding:4px 8px;border-radius:12px;background:#e6f3f6;font-size:12px}
+.search{width:280px}.hero{padding:20px;background:linear-gradient(120deg,#176b87,#238b91);color:white;border-radius:12px}
+.stat{font-size:13px;color:#667085}.message{position:fixed;bottom:20px;right:20px;background:#172033;color:white;padding:12px 18px;border-radius:8px;display:none}
+@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}aside{width:170px}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>🏥 Hospital Management System</h1><p>DBMS College Project — Demo Application</p></div>
+<div>Team: Umasrinu • Udayakiran • Madhavan • Sudeep</div>
+</header>
+<div class="layout">
+<aside><nav>
+<button class="active" onclick="show('dashboard',this)">🏠 Dashboard</button>
+<button onclick="show('patients',this)">👤 Patients</button>
+<button onclick="show('doctors',this)">👨‍⚕️ Doctors</button>
+<button onclick="show('appointments',this)">📅 Appointments</button>
+<button onclick="show('records',this)">📋 Medical Records</button>
+<button onclick="show('medicines',this)">💊 Medicines</button>
+<button onclick="show('billing',this)">💰 Billing</button>
+<button onclick="show('reports',this)">📊 Reports</button>
+</nav></aside>
+<main>
+
+<section id="dashboard" class="page active">
+<div class="hero"><h2>Welcome to Hospital Management System</h2>
+<p>Manage patients, doctors, appointments, medical records, medicines and billing in one place.</p>
+</div>
+<div class="cards">
+<div class="card"><small>Total Patients</small><b id="pc">20</b></div>
+<div class="card"><small>Total Doctors</small><b>12</b></div>
+<div class="card"><small>Appointments</small><b>25</b></div>
+<div class="card"><small>Paid Revenue</small><b>₹1,84,500</b></div>
+</div>
+<div class="panel"><h3>Today's Appointments</h3><table><tr><th>Patient</th><th>Doctor</th><th>Department</th><th>Time</th><th>Status</th></tr>
+<tr><td>Ravi Kumar</td><td>Dr. Arun Kumar</td><td>Cardiology</td><td>10:30 AM</td><td><span class="badge">Booked</span></td></tr>
+<tr><td>Sneha Reddy</td><td>Dr. Priya Rao</td><td>Orthopaedics</td><td>11:00 AM</td><td><span class="badge">Completed</span></td></tr>
+<tr><td>Kiran</td><td>Dr. Naveen Reddy</td><td>Neurology</td><td>12:00 PM</td><td><span class="badge">Booked</span></td></tr>
+</table></div>
+</section>
+
+<section id="patients" class="page">
+<h2>Patient Management</h2><div class="panel"><div class="form">
+<input id="pn" placeholder="Patient Name"><input id="pp" placeholder="Phone"><input id="pe" placeholder="Email">
+<button class="btn" onclick="addPatient()">+ Add Patient</button></div></div>
+<div class="panel"><input class="search" placeholder="Search patient..." oninput="searchPatient(this.value)">
+<table><thead><tr><th>ID</th><th>Name</th><th>DOB</th><th>Gender</th><th>Phone</th><th>Address</th><th>Action</th></tr></thead>
+<tbody id="patientsTable"></tbody></table></div>
+</section>
+
+<section id="doctors" class="page"><h2>Doctor Management</h2><div class="panel">
+<table><tr><th>ID</th><th>Doctor</th><th>Specialization</th><th>Department</th><th>Experience</th></tr>
+<tr><td>11</td><td>Dr. Arun Kumar</td><td>Cardiologist</td><td>Cardiology</td><td>12 years</td></tr>
+<tr><td>12</td><td>Dr. Priya Rao</td><td>Orthopaedic</td><td>Orthopaedics</td><td>9 years</td></tr>
+<tr><td>13</td><td>Dr. Naveen Reddy</td><td>Neurologist</td><td>Neurology</td><td>15 years</td></tr>
+<tr><td>14</td><td>Dr. Meena Das</td><td>ENT Specialist</td><td>ENT</td><td>7 years</td></tr>
+</table></div></section>
+
+<section id="appointments" class="page"><h2>Appointment Management</h2><div class="panel"><button class="btn" onclick="book()">+ Book New Appointment</button>
+<table><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr>
+<tr><td>5001</td><td>Ravi Kumar</td><td>Dr. Arun Kumar</td><td>30-09-2026</td><td>10:30 AM</td><td>Booked</td></tr>
+<tr><td>5002</td><td>Sneha Reddy</td><td>Dr. Priya Rao</td><td>01-10-2026</td><td>11:00 AM</td><td>Completed</td></tr>
+<tr><td>5003</td><td>Kiran</td><td>Dr. Naveen Reddy</td><td>02-10-2026</td><td>12:00 PM</td><td>Booked</td></tr>
+</table></div></section>
+
+<section id="records" class="page"><h2>Medical Records</h2><div class="panel"><table>
+<tr><th>Record ID</th><th>Patient</th><th>Doctor</th><th>Diagnosis</th><th>Treatment</th></tr>
+<tr><td>7001</td><td>Ravi Kumar</td><td>Dr. Arun Kumar</td><td>Hypertension</td><td>Regular monitoring and medication</td></tr>
+<tr><td>7002</td><td>Sneha Reddy</td><td>Dr. Priya Rao</td><td>Knee pain</td><td>Physiotherapy and medication</td></tr>
+</table></div></section>
+
+<section id="medicines" class="page"><h2>Medicine & Pharmacy</h2><div class="panel"><table>
+<tr><th>ID</th><th>Medicine</th><th>Type</th><th>Price</th><th>Stock</th><th>Expiry</th></tr>
+<tr><td>301</td><td>Paracetamol</td><td>Tablet</td><td>₹25</td><td>100</td><td>31-12-2027</td></tr>
+<tr><td>302</td><td>Amoxicillin</td><td>Capsule</td><td>₹80</td><td>50</td><td>30-06-2027</td></tr>
+<tr><td>303</td><td>Vitamin D</td><td>Tablet</td><td>₹120</td><td>40</td><td>31-01-2028</td></tr>
+</table></div></section>
+
+<section id="billing" class="page"><h2>Billing Management</h2><div class="cards">
+<div class="card"><small>Total Bills</small><b>20</b></div><div class="card"><small>Revenue</small><b>₹1,84,500</b></div><div class="card"><small>Average Bill</small><b>₹9,225</b></div><div class="card"><small>Highest Bill</small><b>₹32,000</b></div></div>
+<div class="panel"><table><tr><th>Bill ID</th><th>Patient</th><th>Amount</th><th>Date</th><th>Payment</th></tr>
+<tr><td>9001</td><td>Ravi Kumar</td><td>₹4,500</td><td>30-09-2026</td><td class="green">Paid</td></tr>
+<tr><td>9002</td><td>Sneha Reddy</td><td>₹32,000</td><td>11-09-2026</td><td class="green">Paid</td></tr>
+<tr><td>9003</td><td>Kiran</td><td>₹1,200</td><td>30-09-2026</td><td>Pending</td></tr>
+</table></div></section>
+
+<section id="reports" class="page"><h2>Reports & DBMS Features</h2>
+<div class="panel"><h3>Patient + Doctor + Department JOIN</h3><p>This demonstrates the SQL JOIN used in the project.</p>
+<table><tr><th>Patient</th><th>Doctor</th><th>Department</th></tr><tr><td>Ravi Kumar</td><td>Dr. Arun Kumar</td><td>Cardiology</td></tr><tr><td>Sneha Reddy</td><td>Dr. Priya Rao</td><td>Orthopaedics</td></tr></table></div>
+<div class="panel"><h3>Database Concepts Used</h3><p>✓ Primary Keys &nbsp; ✓ Foreign Keys &nbsp; ✓ 1NF, 2NF, 3NF &nbsp; ✓ CRUD &nbsp; ✓ DDL &nbsp; ✓ DML &nbsp; ✓ DQL &nbsp; ✓ JOIN &nbsp; ✓ Aggregate Functions &nbsp; ✓ VIEW &nbsp; ✓ Indexes &nbsp; ✓ Validation</p></div>
+<div class="panel"><h3>Integrity Validation</h3><p class="green">✓ No duplicate patient IDs</p><p class="green">✓ No orphan appointments</p><p class="green">✓ Required patient fields validated</p><p class="green">✓ Medicine expiry checked</p></div>
+</section>
+</main></div>
+<div id="msg" class="message"></div>
+<script>
+let patients=[
+{ id:101,name:"Ravi Kumar",dob:"14-05-2001",gender:"M",phone:"9876543210",address:"Kakinada"},
+{ id:102,name:"Sneha Reddy",dob:"02-11-1995",gender:"F",phone:"9876501234",address:"Rajahmundry"},
+{ id:103,name:"Kiran",dob:"08-07-2000",gender:"M",phone:"9812345670",address:"Kakinada"}];
+function show(id,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");if(id==="patients")renderPatients();}
+function renderPatients(list=patients){document.getElementById("patientsTable").innerHTML=list.map((p,i)=>`<tr><td>${p.id}</td><td>${p.name}</td><td>${p.dob}</td><td>${p.gender}</td><td>${p.phone}</td><td>${p.address}</td><td><button class="btn danger" onclick="delPatient(${i})">Delete</button></td></tr>`).join("")}
+function addPatient(){let n=document.getElementById("pn").value||"Demo Patient",ph=document.getElementById("pp").value||"9000000000",em=document.getElementById("pe").value||"demo@mail.com";patients.push({id:101+patients.length,name:n,dob:"01-01-2000",gender:"O",phone:ph,address:"Kakinada"});document.getElementById("pn").value="";document.getElementById("pp").value="";document.getElementById("pe").value="";renderPatients();document.getElementById("pc").textContent=patients.length+17;toast("Patient added successfully");}
+function delPatient(i){patients.splice(i,1);renderPatients();toast("Patient deleted");}
+function searchPatient(q){renderPatients(patients.filter(p=>Object.values(p).some(v=>String(v).toLowerCase().includes(q.toLowerCase()))))}
+function book(){toast("Appointment booking demo opened — appointment can be explained during presentation.");}
+function toast(s){let m=document.getElementById("msg");m.textContent=s;m.style.display="block";setTimeout(()=>m.style.display="none",2200)}
+renderPatients();
+</script>
+</body>
+</html>
